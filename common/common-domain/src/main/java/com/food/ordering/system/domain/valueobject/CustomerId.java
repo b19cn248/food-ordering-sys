@@ -1,12 +1,11 @@
 package com.food.ordering.system.domain.valueobject;
 
-public class CustomerId extends BaseId<String> {
+import java.util.UUID;
 
-    public CustomerId(String value) {
+public class CustomerId extends BaseId<UUID> {
+
+    public CustomerId(UUID value) {
         super(value);
     }
 
-    public static CustomerId generate() {
-        return new CustomerId(java.util.UUID.randomUUID().toString());
-    }
 }

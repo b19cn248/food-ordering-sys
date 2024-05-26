@@ -37,6 +37,47 @@ public class Order extends AggregationRoot<OrderId> {
         validateItemsPrice();
     }
 
+    public void pay() {
+        if (orderStatus != OrderStatus.PENDING) {
+            throw new OrderDomainException("Order is not pending");
+        }
+
+        orderStatus = OrderStatus.PAID;
+    }
+
+    public void approve() {
+        if (orderStatus != OrderStatus.PAID) {
+            throw new OrderDomainException("Order is not paid");
+        }
+
+        orderStatus = OrderStatus.APPROVED;
+    }
+
+    public void initCancel(List<String> failureMessages) {
+        if (orderStatus != OrderStatus.PAID) {
+            throw new OrderDomainException("Order is not paid");
+        }
+
+        orderStatus = OrderStatus.CANCELLING;
+        updateFailureMessages(failureMessages);
+    }
+
+    private void updateFailureMessages(List<String> failureMessages) {
+        if (this.failureMessages != null && failureMessages != null) {
+            this.failureMessages.addAll(failureMessages.stream().filter(message -> !message.isEmpty()).toList());
+        } else {
+            this.failureMessages = failureMessages;
+        }
+    }
+
+    public void cancel(List<String> failureMessages) {
+        if (!(orderStatus == OrderStatus.CANCELLING || orderStatus == OrderStatus.PENDING)) {
+            throw new OrderDomainException("Order is not in correct state for cancel operation!");
+        }
+        orderStatus = OrderStatus.CANCELLED;
+        updateFailureMessages(failureMessages);
+    }
+
     private void validateInitialOrder() {
         if (orderStatus != null && getId() != null) {
             throw new OrderDomainException("Order is already initialized");
@@ -50,13 +91,14 @@ public class Order extends AggregationRoot<OrderId> {
     }
 
     private void validateItemsPrice() {
-        Money orderItemsPrice = items.stream()
-                .map(OrderItem::getSubTotal)
-                .reduce(Money.ZERO, Money::add);
+        Money orderItemsTotal = items.stream().map(orderItem -> {
+            validateItemPrice(orderItem);
+            return orderItem.getSubTotal();
+        }).reduce(Money.ZERO, Money::add);
 
-        if (!price.equals(orderItemsPrice)) {
+        if (!price.equals(orderItemsTotal)) {
             throw new OrderDomainException("Total price: " + price.getAmount()
-                    + " is not equal to the sum of items price: " + orderItemsPrice.getAmount());
+                    + " is not equal to the sum of items price: " + orderItemsTotal.getAmount());
         }
     }
 
@@ -137,7 +179,7 @@ public class Order extends AggregationRoot<OrderId> {
         private Builder() {
         }
 
-        public Builder id(OrderId val) {
+        public Builder orderId(OrderId val) {
             orderId = val;
             return this;
         }
