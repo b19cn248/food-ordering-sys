@@ -29,7 +29,7 @@ public class OrderCreateCommandHandler {
 
         log.info("Order created with id:{}", orderCreatedEvent.getOrder().getId().getValue());
 
-        return orderDataMapper.orderToCreateOrderResponse(orderCreatedEvent.getOrder());
+        return orderDataMapper.orderToCreateOrderResponse(orderCreatedEvent.getOrder(), "Order crate successfully.");
 
     }
 
