@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class OrderCreateCommandHandler {
 
-
     private final OrderCreateHelper orderCreateHelper;
 
     private final OrderDataMapper orderDataMapper;
@@ -29,7 +28,9 @@ public class OrderCreateCommandHandler {
 
         log.info("Order created with id:{}", orderCreatedEvent.getOrder().getId().getValue());
 
-        return orderDataMapper.orderToCreateOrderResponse(orderCreatedEvent.getOrder(), "Order crate successfully.");
+        orderCreatedPaymentRequestMessagePublisher.publish(orderCreatedEvent);
+
+        return orderDataMapper.orderToCreateOrderResponse(orderCreatedEvent.getOrder(), "Order created successfully.");
 
     }
 

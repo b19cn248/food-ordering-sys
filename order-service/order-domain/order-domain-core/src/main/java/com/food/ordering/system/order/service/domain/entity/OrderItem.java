@@ -101,4 +101,16 @@ public class OrderItem extends BaseEntity<OrderItemId> {
             return new OrderItem(this);
         }
     }
+
+
+    @Override
+    public String toString() {
+        return "OrderItem{" +
+                "orderId=" + orderId +
+                ", product=" + product +
+                ", quantity=" + quantity +
+                ", price=" + price +
+                ", subTotal=" + subTotal +
+                '}';
+    }
 }

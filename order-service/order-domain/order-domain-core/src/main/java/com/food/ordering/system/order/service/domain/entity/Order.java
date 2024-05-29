@@ -103,8 +103,11 @@ public class Order extends AggregationRoot<OrderId> {
     }
 
     private void validateItemPrice(OrderItem orderItem) {
+
+        System.out.println("OrderItem: " + orderItem);
+
         if (!orderItem.isPriceValid()) {
-            throw new OrderDomainException("Order item price" + orderItem.getPrice().getAmount()
+            throw new OrderDomainException("Order item price " + orderItem.getPrice().getAmount()
                     + " is not valid for product: " + orderItem.getProduct().getId().getValue());
         }
     }
@@ -227,5 +230,12 @@ public class Order extends AggregationRoot<OrderId> {
         public Order build() {
             return new Order(this);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "items=" + items +
+                '}';
     }
 }

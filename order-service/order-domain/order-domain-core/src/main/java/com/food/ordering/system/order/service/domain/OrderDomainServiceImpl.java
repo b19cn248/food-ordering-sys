@@ -20,6 +20,7 @@ public class OrderDomainServiceImpl implements OrderDomainService {
 
     @Override
     public OrderCreatedEvent validateAndInitiateOrder(Order order, Restaurant restaurant) {
+
         validateRestaurant(restaurant);
         setOrderProductInformation(order, restaurant);
         order.validateOrder();
@@ -68,11 +69,13 @@ public class OrderDomainServiceImpl implements OrderDomainService {
         }
     }
 
+
     private void setOrderProductInformation(Order order, Restaurant restaurant) {
-        order.getItems().forEach(item -> restaurant.getProducts().forEach(product -> {
-            Product currentProduct = item.getProduct();
-            if (currentProduct.equals(product)) {
-                product.updateWithConfirmedNameAndPrice(product.getName(), product.getPrice());
+        order.getItems().forEach(orderItem -> restaurant.getProducts().forEach(restaurantProduct -> {
+            Product currentProduct = orderItem.getProduct();
+            if (currentProduct.equals(restaurantProduct)) {
+                currentProduct.updateWithConfirmedNameAndPrice(restaurantProduct.getName(),
+                        restaurantProduct.getPrice());
             }
         }));
     }

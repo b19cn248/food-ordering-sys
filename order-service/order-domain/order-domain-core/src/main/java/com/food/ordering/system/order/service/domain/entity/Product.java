@@ -3,6 +3,7 @@ package com.food.ordering.system.order.service.domain.entity;
 import com.food.ordering.system.domain.entity.BaseEntity;
 import com.food.ordering.system.domain.valueobject.Money;
 import com.food.ordering.system.domain.valueobject.ProductId;
+import lombok.Data;
 
 public class Product extends BaseEntity<ProductId> {
 
@@ -38,5 +39,13 @@ public class Product extends BaseEntity<ProductId> {
 
     public void setPrice(Money price) {
         this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id='" + this.getId().getValue() + '\'' +
+                ", price=" + price +
+                '}';
     }
 }
