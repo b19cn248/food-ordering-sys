@@ -19,19 +19,19 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OrderTrackCommandHandler {
 
-    private final OrderDataMapper orderDataMapper;
-    private final OrderRepository orderRepository;
+  private final OrderDataMapper orderDataMapper;
+  private final OrderRepository orderRepository;
 
-    @Transactional(readOnly = true)
-    public TrackOrderResponse trackOrder(TrackOrderQuery trackOrderQuery) {
-        Optional<Order> order = orderRepository.findByTrackingNumber(new TrackingId(trackOrderQuery.getOrderTrackingId()));
+  @Transactional(readOnly = true)
+  public TrackOrderResponse trackOrder(TrackOrderQuery trackOrderQuery) {
+    Optional<Order> order = orderRepository.findByTrackingNumber(new TrackingId(trackOrderQuery.orderTrackingId()));
 
-        if (order.isEmpty()) {
-            log.info("Order not found with tracking id:{}", trackOrderQuery.getOrderTrackingId());
+    if (order.isEmpty()) {
+      log.info("Order not found with tracking id:{}", trackOrderQuery.orderTrackingId());
 
-            throw new OrderNotFoundException("Order not found with tracking id:" + trackOrderQuery.getOrderTrackingId());
-        }
-
-        return orderDataMapper.orderToTrackOrderResponse(order.get());
+      throw new OrderNotFoundException("Order not found with tracking id:" + trackOrderQuery.orderTrackingId());
     }
+
+    return orderDataMapper.orderToTrackOrderResponse(order.get());
+  }
 }

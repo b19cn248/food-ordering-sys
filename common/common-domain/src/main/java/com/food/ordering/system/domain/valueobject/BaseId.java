@@ -1,17 +1,16 @@
 package com.food.ordering.system.domain.valueobject;
 
+import lombok.Getter;
+
 import java.util.Objects;
 
+@Getter
 public abstract class BaseId <T>{
 
     private final T value;
 
     protected BaseId(T value) {
         this.value = value;
-    }
-
-    public T getValue() {
-        return value;
     }
 
     @Override

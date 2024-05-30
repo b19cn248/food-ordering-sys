@@ -23,62 +23,59 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class OrderCreateHelper {
 
-    private final OrderDomainService orderDomainService;
-    private final OrderRepository orderRepository;
-    private final CustomerRepository customerRepository;
-    private final RestaurantRepository restaurantRepository;
-    private final OrderDataMapper orderDataMapper;
+  private final OrderDomainService orderDomainService;
+  private final OrderRepository orderRepository;
+  private final CustomerRepository customerRepository;
+  private final RestaurantRepository restaurantRepository;
+  private final OrderDataMapper orderDataMapper;
 
-    @Transactional
-    public OrderCreatedEvent persistOrder(CreateOrderCommand createOrderCommand) {
-        checkCustomer(createOrderCommand.getCustomerId());
-        Restaurant restaurant = checkRestaurant(createOrderCommand);
-        Order order = orderDataMapper.createOrderCommandToOrder(createOrderCommand);
+  @Transactional
+  public OrderCreatedEvent persistOrder(CreateOrderCommand createOrderCommand) {
+    checkCustomer(createOrderCommand.customerId());
+    Restaurant restaurant = checkRestaurant(createOrderCommand);
+    Order order = orderDataMapper.createOrderCommandToOrder(createOrderCommand);
 
-        System.out.println(order);
+    OrderCreatedEvent orderCreatedEvent = orderDomainService.validateAndInitiateOrder(order, restaurant);
 
-        OrderCreatedEvent orderCreatedEvent = orderDomainService.validateAndInitiateOrder(order, restaurant);
+    saveOrder(order);
 
-        saveOrder(order);
+    log.info("Order created with id:{}", order.getId());
 
-        log.info("Order created with id:{}", order.getId());
+    return orderCreatedEvent;
+  }
 
-        return orderCreatedEvent;
+
+  private Restaurant checkRestaurant(CreateOrderCommand createOrderCommand) {
+    Restaurant restaurant = orderDataMapper.createOrderCommandToRestaurant(createOrderCommand);
+
+    Optional<Restaurant> optionalRestaurant = restaurantRepository.findRestaurantInformation(restaurant);
+
+    if (optionalRestaurant.isEmpty()) {
+      log.warn("Restaurant not found with id:{}", createOrderCommand.restaurantId());
+      throw new OrderDomainException("Could not find restaurant information with id" + createOrderCommand.restaurantId());
     }
 
+    return optionalRestaurant.get();
+  }
 
-    private Restaurant checkRestaurant(CreateOrderCommand createOrderCommand) {
-        Restaurant restaurant = orderDataMapper.createOrderCommandToRestaurant(createOrderCommand);
+  private void checkCustomer(UUID customerId) {
+    Optional<Customer> customer = customerRepository.findCustomer(customerId);
 
-        Optional<Restaurant> optionalRestaurant = restaurantRepository.findRestaurantInformation(restaurant);
+    if (customer.isEmpty()) {
+      log.warn("Customer not found wit id:{}", customerId);
+      throw new OrderDomainException("Could not find customer with id" + customerId);
+    }
+  }
 
-        if (optionalRestaurant.isEmpty()) {
-            log.warn("Restaurant not found with id:{}", createOrderCommand.getRestaurantId());
-            throw new OrderDomainException("Could not find restaurant information with id" + createOrderCommand.getRestaurantId());
-        }
+  private void saveOrder(Order order) {
+    Order savedOrder = orderRepository.save(order);
 
-        return optionalRestaurant.get();
+    if (savedOrder == null) {
+      log.error("Could not save order");
+      throw new OrderDomainException("Could not save order");
     }
 
-    private void checkCustomer(UUID customerId) {
-        Optional<Customer> customer = customerRepository.findCustomer(customerId);
+    log.info("Order saved with id:{}", savedOrder.getId());
 
-        if (customer.isEmpty()) {
-            log.warn("Customer not found wit id:{}", customerId);
-            throw new OrderDomainException("Could not find customer with id" + customerId);
-        }
-    }
-
-    private Order saveOrder(Order order) {
-        Order savedOrder = orderRepository.save(order);
-
-        if (savedOrder == null) {
-            log.error("Could not save order");
-            throw new OrderDomainException("Could not save order");
-        }
-
-        log.info("Order saved with id:{}", savedOrder.getId());
-
-        return savedOrder;
-    }
+  }
 }
