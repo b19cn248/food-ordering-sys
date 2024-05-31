@@ -7,15 +7,21 @@
         <groupId>com.food.ordering.system</groupId>
         <artifactId>food-ordering-sys</artifactId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <packaging>pom</packaging>
-    <artifactId>common</artifactId>
+    <artifactId>common-application</artifactId>
 
-    <modules>
-        <module>common-application</module>
-        <module>common-domain</module>
-    </modules>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+    </dependencies>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

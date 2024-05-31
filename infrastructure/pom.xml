@@ -12,6 +12,8 @@
     <packaging>pom</packaging>
     <artifactId>infrastructure</artifactId>
 
+    <dependencies></dependencies>
+
     <modules>
         <module>kafka</module>
     </modules>
