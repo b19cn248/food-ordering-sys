@@ -2,6 +2,7 @@ package com.food.ordering.system.order.service.domain.dto.message;
 
 import com.food.ordering.system.domain.valueobject.OrderApprovalStatus;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Getter
 @Data
+@Builder
 @AllArgsConstructor
 public class RestaurantApprovalResponse {
 

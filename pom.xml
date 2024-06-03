@@ -19,10 +19,8 @@
     <modules>
         <module>order-service</module>
         <module>common</module>
-        <module>common/common-domain</module>
         <module>infrastructure</module>
-        <module>infrastructure/kafka</module>
-        <module>common/common-application</module>
+        <module>customer-service</module>
     </modules>
 
     <properties>
@@ -30,7 +28,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mockito.version>4.3.1</mockito.version>
-        <spring-kafka.version>2.8.2</spring-kafka.version>
+        <spring-kafka.version>3.0.0</spring-kafka.version>
         <kafka-avro-serializer.version>7.0.1</kafka-avro-serializer.version>
         <avro.version>1.11.0</avro.version>
     </properties>
