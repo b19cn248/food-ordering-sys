@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static com.food.ordering.system.order.service.domain.entity.Order.FAILURE_MESSAGE_DELIMITER;
 
@@ -114,6 +115,7 @@ public class OrderDataAccessMapper {
   private OrderAddressEntity deliveryAddressToAddressEntity(StreetAddress deliveryAddress) {
 
     return OrderAddressEntity.builder()
+          .id(deliveryAddress.id())
           .street(deliveryAddress.street())
           .city(deliveryAddress.city())
           .postalCode(deliveryAddress.postalCode())

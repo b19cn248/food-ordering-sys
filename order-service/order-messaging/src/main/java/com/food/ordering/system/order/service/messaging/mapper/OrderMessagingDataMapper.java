@@ -9,12 +9,16 @@ import com.food.ordering.system.order.service.domain.event.OrderCreatedEvent;
 import com.food.ordering.system.order.service.domain.event.OrderPaidEvent;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 public class OrderMessagingDataMapper {
 
   public PaymentRequestAvroModel OrderCreatedEventToPaymentRequestAvroModel(OrderCreatedEvent orderCreatedEvent) {
     Order order = orderCreatedEvent.getOrder();
     return PaymentRequestAvroModel.newBuilder()
+          .setId(UUID.randomUUID().toString())
+          .setSagaId("")
           .setOrderId(order.getId().getValue().toString())
           .setCustomerId(order.getCustomerId().getValue().toString())
           .setOrderId(order.getId().getValue().toString())

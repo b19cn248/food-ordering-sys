@@ -27,7 +27,6 @@ public class RestaurantEntity {
   private UUID productId;
 
   private String restaurantName;
-  private String restaurantAddress;
   private boolean restaurantActive;
   private String productName;
   private BigDecimal productPrice;
