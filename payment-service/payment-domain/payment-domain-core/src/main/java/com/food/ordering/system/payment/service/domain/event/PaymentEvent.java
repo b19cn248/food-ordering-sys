@@ -11,7 +11,6 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-@Builder
 public abstract class PaymentEvent implements DomainEvent<Payment> {
 
   private final Payment payment;
