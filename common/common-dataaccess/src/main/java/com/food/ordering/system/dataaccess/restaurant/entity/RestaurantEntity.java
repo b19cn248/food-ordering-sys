@@ -1,4 +1,4 @@
-package com.food.ordering.system.order.service.dataaccess.restaurant.entity;
+package com.food.ordering.system.dataaccess.restaurant.entity;
 
 
 import jakarta.persistence.Entity;
@@ -27,9 +27,10 @@ public class RestaurantEntity {
   private UUID productId;
 
   private String restaurantName;
-  private boolean restaurantActive;
+  private Boolean restaurantActive;
   private String productName;
   private BigDecimal productPrice;
+  private Boolean productAvailable;
 
   @Override
   public boolean equals(Object o) {
