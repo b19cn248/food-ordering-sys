@@ -10,13 +10,23 @@ import org.springframework.validation.annotation.Validated;
 @Service
 @Slf4j
 public class RestaurantApprovalResponseMessageListenerImpl implements RestaurantApprovalResponseMessageListener {
+
+    private final OrderApprovalSaga orderApprovalSaga;
+
+    public RestaurantApprovalResponseMessageListenerImpl(OrderApprovalSaga orderApprovalSaga) {
+        this.orderApprovalSaga = orderApprovalSaga;
+    }
+
     @Override
     public void orderApproved(RestaurantApprovalResponse restaurantApprovalResponse) {
+        orderApprovalSaga.process(restaurantApprovalResponse);
 
+        log.info("Order with id: {} approved", restaurantApprovalResponse.getOrderId());
     }
 
     @Override
     public void orderRejected(RestaurantApprovalResponse restaurantApprovalResponse) {
-
+        orderApprovalSaga.rollback(restaurantApprovalResponse);
+        log.info("Order with id: {} rejected", restaurantApprovalResponse.getOrderId());
     }
 }
