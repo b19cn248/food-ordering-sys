@@ -15,111 +15,111 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 import static com.food.ordering.system.order.service.domain.entity.Order.FAILURE_MESSAGE_DELIMITER;
 
 @Component
 public class OrderDataAccessMapper {
 
-  public OrderEntity mapToEntity(Order order) {
-    OrderEntity orderEntity = OrderEntity.builder()
-          .id(order.getId().getValue())
-          .customerId(order.getCustomerId().getValue())
-          .restaurantId(order.getRestaurantId().getValue())
-          .trackingId(order.getTrackingId().getValue())
-          .address(deliveryAddressToAddressEntity(order.getDeliveryAddress()))
-          .price(order.getPrice().amount())
-          .items(orderItemsToOrderItemEntities(order.getItems()))
-          .orderStatus(order.getOrderStatus())
-          .failureMessages(order.getFailureMessages() != null ?
-                String.join(Order.FAILURE_MESSAGE_DELIMITER, order.getFailureMessages()) : "")
-          .build();
+    public OrderEntity mapToEntity(Order order) {
+        OrderEntity orderEntity = OrderEntity.builder()
+                .id(order.getId().getValue())
+                .customerId(order.getCustomerId().getValue())
+                .restaurantId(order.getRestaurantId().getValue())
+                .trackingId(order.getTrackingId().getValue())
+                .address(deliveryAddressToAddressEntity(order.getDeliveryAddress()))
+                .price(order.getPrice().amount())
+                .items(orderItemsToOrderItemEntities(order.getItems()))
+                .orderStatus(order.getOrderStatus())
+                .failureMessages(order.getFailureMessages() != null ?
+                        String.join(Order.FAILURE_MESSAGE_DELIMITER, order.getFailureMessages()) : "")
+                .build();
 
-    orderEntity.getAddress().setOrder(orderEntity);
+        orderEntity.getAddress().setOrder(orderEntity);
 
-    orderEntity.getItems().forEach(orderItemEntity -> orderItemEntity.setOrder(orderEntity));
+        orderEntity.getItems().forEach(orderItemEntity -> orderItemEntity.setOrder(orderEntity));
 
-    return orderEntity;
-  }
+        return orderEntity;
+    }
 
 
-  public Order mapToDomain(OrderEntity orderEntity) {
+    public Order mapToDomain(OrderEntity orderEntity) {
 
-    Order order = Order.builder()
-          .customerId(new CustomerId(orderEntity.getCustomerId()))
-          .restaurantId(new RestaurantId(orderEntity.getRestaurantId()))
-          .deliveryAddress(addressEntityToDeliveryAddress(orderEntity.getAddress()))
-          .price(new Money(orderEntity.getPrice()))
-          .items(orderItemEntitiesToOrderItems(orderEntity.getItems()))
-          .trackingId(new TrackingId(orderEntity.getTrackingId()))
-          .orderStatus(orderEntity.getOrderStatus())
-          .failureMessages(orderEntity.getFailureMessages().isEmpty() ? new ArrayList<>() :
-                new ArrayList<>(Arrays.asList(orderEntity.getFailureMessages()
-                      .split(FAILURE_MESSAGE_DELIMITER))))
-          .build();
+        Order order = Order.builder()
+                .customerId(new CustomerId(orderEntity.getCustomerId()))
+                .restaurantId(new RestaurantId(orderEntity.getRestaurantId()))
+                .deliveryAddress(addressEntityToDeliveryAddress(orderEntity.getAddress()))
+                .price(new Money(orderEntity.getPrice()))
+                .items(orderItemEntitiesToOrderItems(orderEntity.getItems()))
+                .trackingId(new TrackingId(orderEntity.getTrackingId()))
+                .orderStatus(orderEntity.getOrderStatus())
+                .failureMessages(orderEntity.getFailureMessages().isEmpty() ? new ArrayList<>() :
+                        new ArrayList<>(Arrays.asList(orderEntity.getFailureMessages()
+                                .split(FAILURE_MESSAGE_DELIMITER))))
+                .build();
 
-    order.setId(new OrderId(orderEntity.getId()));
+        order.setId(new OrderId(orderEntity.getId()));
 
-    return order;
-  }
+        return order;
+    }
 
-  private List<OrderItem> orderItemEntitiesToOrderItems(List<OrderItemEntity> items) {
+    private List<OrderItem> orderItemEntitiesToOrderItems(List<OrderItemEntity> items) {
 
-    return items.stream()
-          .map(this::orderItemEntityToOrderItem)
-          .toList();
-  }
+        return items.stream()
+                .map(this::orderItemEntityToOrderItem)
+                .toList();
+    }
 
-  private OrderItem orderItemEntityToOrderItem(OrderItemEntity orderItemEntity) {
+    private OrderItem orderItemEntityToOrderItem(OrderItemEntity orderItemEntity) {
 
-    OrderItem orderItem = OrderItem.builder()
-          .product(new Product(new ProductId(orderItemEntity.getProductId())))
-          .quantity(orderItemEntity.getQuantity())
-          .subTotal(new Money(orderItemEntity.getSubTotal()))
-          .price(new Money(orderItemEntity.getPrice()))
-          .build();
+        OrderItem orderItem = OrderItem.builder()
+                .product(new Product(new ProductId(orderItemEntity.getProductId())))
+                .quantity(orderItemEntity.getQuantity())
+                .subTotal(new Money(orderItemEntity.getSubTotal()))
+                .price(new Money(orderItemEntity.getPrice()))
+                .build();
 
-    orderItem.setId(new OrderItemId(orderItemEntity.getId()));
+        orderItem.setId(new OrderItemId(orderItemEntity.getId()));
 
-    return orderItem;
-  }
+        return orderItem;
+    }
 
-  private StreetAddress addressEntityToDeliveryAddress(OrderAddressEntity address) {
+    private StreetAddress addressEntityToDeliveryAddress(OrderAddressEntity address) {
 
-    return StreetAddress.builder()
-          .street(address.getStreet())
-          .city(address.getCity())
-          .postalCode(address.getPostalCode())
-          .build();
-  }
+        return StreetAddress.builder()
+                .id(address.getId())
+                .street(address.getStreet())
+                .city(address.getCity())
+                .postalCode(address.getPostalCode())
+                .build();
+    }
 
-  private List<OrderItemEntity> orderItemsToOrderItemEntities(List<OrderItem> items) {
+    private List<OrderItemEntity> orderItemsToOrderItemEntities(List<OrderItem> items) {
 
-    return items.stream()
-          .map(this::orderItemToOrderItemEntity)
-          .toList();
-  }
+        return items.stream()
+                .map(this::orderItemToOrderItemEntity)
+                .toList();
+    }
 
-  private OrderItemEntity orderItemToOrderItemEntity(OrderItem orderItem) {
+    private OrderItemEntity orderItemToOrderItemEntity(OrderItem orderItem) {
 
-    return OrderItemEntity.builder()
-          .id(orderItem.getId().getValue())
-          .productId(orderItem.getProduct().getId().getValue())
-          .quantity(orderItem.getQuantity())
-          .subTotal(orderItem.getSubTotal().amount())
-          .price(orderItem.getPrice().amount())
-          .build();
-  }
+        return OrderItemEntity.builder()
+                .id(orderItem.getId().getValue())
+                .productId(orderItem.getProduct().getId().getValue())
+                .quantity(orderItem.getQuantity())
+                .subTotal(orderItem.getSubTotal().amount())
+                .price(orderItem.getPrice().amount())
+                .build();
+    }
 
-  private OrderAddressEntity deliveryAddressToAddressEntity(StreetAddress deliveryAddress) {
+    private OrderAddressEntity deliveryAddressToAddressEntity(StreetAddress deliveryAddress) {
 
-    return OrderAddressEntity.builder()
-          .id(deliveryAddress.id())
-          .street(deliveryAddress.street())
-          .city(deliveryAddress.city())
-          .postalCode(deliveryAddress.postalCode())
-          .build();
-  }
+        return OrderAddressEntity.builder()
+                .id(deliveryAddress.id())
+                .street(deliveryAddress.street())
+                .city(deliveryAddress.city())
+                .postalCode(deliveryAddress.postalCode())
+                .build();
+    }
 
 }

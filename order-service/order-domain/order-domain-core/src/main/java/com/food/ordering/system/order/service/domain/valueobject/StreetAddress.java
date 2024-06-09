@@ -1,6 +1,7 @@
 package com.food.ordering.system.order.service.domain.valueobject;
 
 import lombok.Builder;
+import lombok.ToString;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -18,6 +19,16 @@ public record StreetAddress(UUID id, String street, String postalCode, String ci
   @Override
   public int hashCode() {
     return Objects.hash(street, postalCode, city);
+  }
+
+  @Override
+  public String toString() {
+    return "StreetAddress{" +
+            "id=" + id +
+            ", street='" + street + '\'' +
+            ", postalCode='" + postalCode + '\'' +
+            ", city='" + city + '\'' +
+            '}';
   }
 }
 

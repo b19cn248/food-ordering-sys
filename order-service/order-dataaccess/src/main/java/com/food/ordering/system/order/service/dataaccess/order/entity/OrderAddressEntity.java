@@ -37,4 +37,15 @@ public class OrderAddressEntity {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    @Override
+    public String toString() {
+        return "OrderAddressEntity{" +
+                "id=" + id +
+                ", order=" + order +
+                ", street='" + street + '\'' +
+                ", postalCode='" + postalCode + '\'' +
+                ", city='" + city + '\'' +
+                '}';
+    }
 }

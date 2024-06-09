@@ -1,10 +1,7 @@
 package com.food.ordering.system.payment.service.domain.dto;
 
 import com.food.ordering.system.domain.valueobject.PaymentOrderStatus;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -12,6 +9,7 @@ import java.time.Instant;
 @Getter
 @Builder
 @AllArgsConstructor
+@ToString
 public class PaymentRequest {
 
   private String id;

@@ -36,6 +36,8 @@ public class CreateOrderKafkaMessagePublisher implements OrderCreatedPaymentRequ
 
       log.info("PaymentRequestAvroModel: {}", paymentRequestAvroModel);
 
+      log.info("PaymentRequestAvroModel: {}", paymentRequestAvroModel);
+
       kafkaProducer.send(
             orderServiceConfigData.getPaymentRequestTopicName(),
             orderId,

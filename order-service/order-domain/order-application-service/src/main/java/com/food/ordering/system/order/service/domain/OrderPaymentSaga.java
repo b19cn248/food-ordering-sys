@@ -28,6 +28,8 @@ public class OrderPaymentSaga implements SagaStep<PaymentResponse, OrderPaidEven
 
         Order order = orderSagaHelper.findOrder(paymentResponse.getOrderId());
 
+        log.info("Order is: {}", order);
+
         OrderPaidEvent domainEvent = orderDomainService.payOrder(order, orderPaidRestaurantRequestMessagePublisher);
 
         orderSagaHelper.saveOrder(order);
