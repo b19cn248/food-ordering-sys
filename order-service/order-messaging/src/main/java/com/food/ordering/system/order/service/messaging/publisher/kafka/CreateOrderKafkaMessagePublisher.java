@@ -34,6 +34,7 @@ public class CreateOrderKafkaMessagePublisher implements OrderCreatedPaymentRequ
     try {
       PaymentRequestAvroModel paymentRequestAvroModel = orderMessagingDataMapper.OrderCreatedEventToPaymentRequestAvroModel(event);
 
+
       log.info("PaymentRequestAvroModel: {}", paymentRequestAvroModel);
 
       log.info("PaymentRequestAvroModel: {}", paymentRequestAvroModel);

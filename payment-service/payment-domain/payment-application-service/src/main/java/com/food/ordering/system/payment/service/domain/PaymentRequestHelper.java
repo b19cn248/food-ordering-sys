@@ -17,6 +17,7 @@ import com.food.ordering.system.payment.service.domain.ports.output.repository.P
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +64,7 @@ public class PaymentRequestHelper {
     return paymentEvent;
   }
 
+  @Transactional
   public PaymentEvent persistCancelPayment(PaymentRequest paymentRequest) {
     log.info("Cancelling payment for order id: {}", paymentRequest.getOrderId());
 
@@ -75,6 +77,8 @@ public class PaymentRequestHelper {
     }
 
     Payment payment = paymentOptional.get();
+
+    log.info("Payment is when cancel: {}", payment);
 
     CreditEntry creditEntry = getCreditEntry(payment.getCustomerId());
     List<CreditHistory> creditHistories = getCreditHistories(payment.getCustomerId());

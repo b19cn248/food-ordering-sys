@@ -18,12 +18,18 @@ public class PaymentRequestMessageListenerImpl implements PaymentRequestMessageL
   public void completePayment(PaymentRequest paymentRequest) {
     PaymentEvent paymentEvent = paymentRequestHelper.persistPayment(paymentRequest);
 
+
     firePaymentEvent(paymentEvent);
   }
 
   @Override
   public void cancelPayment(PaymentRequest paymentRequest) {
+
+    log.info("Payment cancelled : {}", paymentRequest);
+
     PaymentEvent paymentEvent = paymentRequestHelper.persistCancelPayment(paymentRequest);
+
+    log.info("Payment cancelled : {}", paymentEvent.getPayment());
 
     firePaymentEvent(paymentEvent);
   }
